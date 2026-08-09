@@ -53,20 +53,23 @@ let user = "matiaskotlik"; in
       };
 
       dock = {
-        autohide = false;
+        autohide = true;
         show-recents = false;
         launchanim = true;
         orientation = "bottom";
         tilesize = 48;
 
         persistent-apps = [
-          { app = "/Applications/Safari.app"; }
-          { app = "/System/Applications/Messages.app"; }
-          { app = "/System/Applications/Notes.app"; }
-          { app = "/System/Applications/Music.app"; }
-          { app = "/System/Applications/Photos.app"; }
-          { app = "/System/Applications/Photo Booth.app"; }
-          { app = "/System/Applications/System Settings.app"; }
+          { app = "/Applications/Firefox.app"; }
+          { app = "/Users/${user}/Applications/Home Manager Apps/iTerm2.app"; }
+          { app = "/Applications/PyCharm.app"; }
+          { app = "/Applications/IntelliJ IDEA.app"; }
+          { app = "/Applications/CLion.app"; }
+          { app = "/Applications/Slack.app"; }
+          { app = "/Applications/Discord.app"; }
+          { app = "/Applications/Signal.app"; }
+          { app = "/Applications/Notion.app"; }
+          { app = "/Applications/Spotify.app"; }
         ];
 
         persistent-others = [

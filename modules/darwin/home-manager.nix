@@ -30,6 +30,8 @@ in
     enable = true;
     casks = pkgs.callPackage ./casks.nix {};
     onActivation.cleanup = "uninstall";
+    # Mirror nix-homebrew taps so cleanup won't untap them
+    taps = builtins.attrNames config.nix-homebrew.taps;
 
     # These app IDs are from using the mas CLI app
     # mas = mac app store
