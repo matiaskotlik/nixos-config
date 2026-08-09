@@ -1,10 +1,8 @@
-{ pkgs, config, ... }:
+{ ... }:
 
 {
-  # Vim state dirs, vim will not create them
-  ".config/vim/undo/.keep".text = "";
-  ".config/vim/backups/.keep".text = "";
-  ".config/vim/swap/.keep".text = "";
+  # Vim state dir, vim will not create it
+  ".local/state/vim/undo/.keep".text = "";
 
   # Public halves of the Bitwarden-held SSH keys
   ".ssh/id_personal.pub".text =

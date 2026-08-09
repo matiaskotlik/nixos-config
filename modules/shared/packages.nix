@@ -1,6 +1,7 @@
 { pkgs }:
 
-with pkgs; [
+with pkgs;
+[
   # General packages for development and system management
   btop
   coreutils
@@ -34,12 +35,12 @@ with pkgs; [
   tree
   tmux
   unzip
-  
+
   # Development tools
   curl
   fzf
   fh
-  
+
   # Programming languages and runtimes
   go
   rustc

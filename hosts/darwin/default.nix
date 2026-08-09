@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
-let user = "matiaskotlik"; in
+let
+  user = "matiaskotlik";
+in
 
 {
   imports = [
@@ -13,21 +15,24 @@ let user = "matiaskotlik"; in
     enable = true;
 
     customSettings = {
-      trusted-users = [ "@admin" "${user}" ];
+      trusted-users = [
+        "@admin"
+        "${user}"
+      ];
       extra-substituters = [ "https://nix-community.cachix.org" ];
-      extra-trusted-public-keys = [ "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
+      extra-trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
     };
 
     # Garbage collection
     determinateNixd.garbageCollector.strategy = "automatic";
   };
 
-
   # Touch ID for sudo
   security.pam.services.sudo_local.touchIdAuth = true;
 
-  environment.systemPackages = with pkgs;
-    import ../../modules/shared/packages.nix { inherit pkgs; };
+  environment.systemPackages = with pkgs; import ../../modules/shared/packages.nix { inherit pkgs; };
 
   # Tailscale
   services.tailscale.enable = true;

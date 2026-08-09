@@ -1,4 +1,4 @@
-self: super: {
+_self: super: {
   # pin newer than nixpkgs
   nix-direnv = super.callPackage (super.fetchFromGitHub {
     owner = "nix-community";

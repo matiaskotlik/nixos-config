@@ -1,4 +1,8 @@
-{ config, pkgs, lib, home-manager, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
 
 let
   user = "matiaskotlik";
@@ -23,7 +27,7 @@ in
 
   homebrew = {
     enable = true;
-    casks = pkgs.callPackage ./casks.nix {};
+    casks = pkgs.callPackage ./casks.nix { };
     onActivation.cleanup = "uninstall";
     # Mirror nix-homebrew taps so cleanup won't untap them
     taps = builtins.attrNames config.nix-homebrew.taps;
@@ -48,33 +52,41 @@ in
   home-manager = {
     useGlobalPkgs = true;
     backupFileExtension = "bak";
-    users.${user} = { pkgs, config, lib, ... }:{
-      home = {
-        enableNixpkgsReleaseCheck = false;
-        packages = pkgs.callPackage ./packages.nix {};
-        file = lib.mkMerge [
-          sharedFiles
-          additionalFiles
-        ];
-        stateVersion = "23.11";
-      };
-      programs = {} // import ../shared/home-manager.nix { inherit config pkgs lib; };
+    users.${user} =
+      {
+        pkgs,
+        config,
+        lib,
+        ...
+      }:
+      {
+        home = {
+          enableNixpkgsReleaseCheck = false;
+          packages = pkgs.callPackage ./packages.nix { };
+          file = lib.mkMerge [
+            sharedFiles
+            additionalFiles
+          ];
+          stateVersion = "23.11";
+        };
+        xdg.enable = true;
+        programs = import ../shared/home-manager.nix { inherit config pkgs lib; };
 
-      # iTerm2 app prefs, profile lives in files.nix
-      targets.darwin.defaults."com.googlecode.iterm2" = {
-        # Default to the nix-managed dynamic profile
-        "Default Bookmark Guid" = "nix-default-0001";
-        PromptOnQuit = false;
-        OnlyWhenMoreTabs = false;
-        HideTab = true;
-        # Homebrew owns updates, not Sparkle
-        SUEnableAutomaticChecks = false;
-      };
+        # iTerm2 app prefs, profile lives in files.nix
+        targets.darwin.defaults."com.googlecode.iterm2" = {
+          # Default to the nix-managed dynamic profile
+          "Default Bookmark Guid" = "nix-default-0001";
+          PromptOnQuit = false;
+          OnlyWhenMoreTabs = false;
+          HideTab = true;
+          # Homebrew owns updates, not Sparkle
+          SUEnableAutomaticChecks = false;
+        };
 
-      # Marked broken Oct 20, 2022 check later to remove this
-      # https://github.com/nix-community/home-manager/issues/3344
-      manual.manpages.enable = false;
-    };
+        # Marked broken Oct 20, 2022 check later to remove this
+        # https://github.com/nix-community/home-manager/issues/3344
+        manual.manpages.enable = false;
+      };
   };
 
 }

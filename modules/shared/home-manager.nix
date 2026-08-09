@@ -1,4 +1,8 @@
-{ config, pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   gh = {
@@ -34,20 +38,26 @@
       };
     };
     # Albacore account, for repos under ~/albacore
-    includes = [{
-      condition = "gitdir:~/albacore/";
-      contents = {
-        user.email = "matias-albacore@users.noreply.github.com";
-        core.sshCommand = "ssh -o IdentitiesOnly=yes -i ~/.ssh/id_albacore.pub";
-      };
-    }];
+    includes = [
+      {
+        condition = "gitdir:~/albacore/";
+        contents = {
+          user.email = "matias-albacore@users.noreply.github.com";
+          core.sshCommand = "ssh -o IdentitiesOnly=yes -i ~/.ssh/id_albacore.pub";
+        };
+      }
+    ];
   };
 
   fish = {
     enable = true;
     plugins = [
-      { name = "bass"; src = pkgs.fishPlugins.bass.src; }
+      {
+        name = "bass";
+        src = pkgs.fishPlugins.bass.src;
+      }
     ];
+    interactiveShellInit = "fish_vi_key_bindings";
   };
 
   direnv = {
@@ -74,61 +84,45 @@
 
   vim = {
     enable = true;
-    plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes vim-startify vim-tmux-navigator ];
-    settings = { ignorecase = true; };
+    plugins = with pkgs.vimPlugins; [
+      vim-airline
+      vim-airline-themes
+      vim-startify
+      vim-tmux-navigator
+    ];
+    settings = {
+      ignorecase = true;
+    };
     extraConfig = ''
       "" General
       set number
       set history=1000
-      set nocompatible
       set modelines=0
-      set encoding=utf-8
       set scrolloff=3
-      set showmode
-      set showcmd
       set hidden
-      set wildmenu
       set wildmode=list:longest
       set cursorline
-      set ttyfast
       set nowrap
-      set ruler
-      set backspace=indent,eol,start
-      set laststatus=2
-      set clipboard=autoselect
 
-      " Dir stuff
-      set nobackup
+      " No backups, no swap
       set nowritebackup
       set noswapfile
-      set backupdir=~/.config/vim/backups
-      set directory=~/.config/vim/swap
 
-      " Persistent undo
+      " State under XDG_STATE_HOME
+      set viminfofile=~/.local/state/vim/viminfo
       set undofile
-      set undodir=~/.config/vim/undo
-      set undolevels=1000
-      set undoreload=10000
+      set undodir=~/.local/state/vim/undo
 
       " Relative line numbers for easy movement
       set relativenumber
-      set rnu
 
       "" Whitespace rules
-      set tabstop=8
       set shiftwidth=2
       set softtabstop=2
       set expandtab
 
       "" Searching
-      set incsearch
       set gdefault
-
-      "" Statusbar
-      set nocompatible " Disable vi-compatibility
-      set laststatus=2 " Always show the statusline
-      let g:airline_theme='bubblegum'
-      let g:airline_powerline_fonts = 1
 
       "" Local keys and such
       let mapleader=","
@@ -137,12 +131,6 @@
       "" Change cursor on mode
       :autocmd InsertEnter * set cul
       :autocmd InsertLeave * set nocul
-
-      "" File-type highlighting and configuration
-      syntax on
-      filetype on
-      filetype plugin on
-      filetype indent on
 
       "" Paste from clipboard
       nnoremap <Leader>, "+gP
@@ -184,11 +172,12 @@
         \ '~/Documents',
         \ ]
 
+      "" Statusbar
       let g:airline_theme='bubblegum'
       let g:airline_powerline_fonts = 1
-      '';
-     };
-  
+    '';
+  };
+
   ssh = {
     enable = true;
     enableDefaultConfig = false;
@@ -201,12 +190,17 @@
       };
       "*" = lib.hm.dag.entryAfter [ "github.com" ] {
         # Set the default values we want to keep
-        SendEnv = [ "LANG" "LC_*" ];
+        SendEnv = [
+          "LANG"
+          "LC_*"
+        ];
         HashKnownHosts = true;
         # Private keys live in Bitwarden, never on disk
-        IdentityAgent = if pkgs.stdenv.hostPlatform.isDarwin
-                        then "~/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
-                        else "~/.bitwarden-ssh-agent.sock";
+        IdentityAgent =
+          if pkgs.stdenv.hostPlatform.isDarwin then
+            "~/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
+          else
+            "~/.bitwarden-ssh-agent.sock";
       };
     };
   };
@@ -221,16 +215,16 @@
       {
         plugin = power-theme;
         extraConfig = ''
-           set -g @tmux_power_theme 'gold'
+          set -g @tmux_power_theme 'gold'
         '';
       }
       {
         plugin = resurrect; # Used by tmux-continuum
 
-        # Use XDG data directory
+        # Session layout is XDG state
         # https://github.com/tmux-plugins/tmux-resurrect/issues/348
         extraConfig = ''
-          set -g @resurrect-dir '$HOME/.cache/tmux/resurrect'
+          set -g @resurrect-dir '$HOME/.local/state/tmux/resurrect'
           set -g @resurrect-capture-pane-contents 'on'
           set -g @resurrect-pane-contents-area 'visible'
         '';
@@ -243,14 +237,8 @@
         '';
       }
     ];
-    terminal = "screen-256color";
     prefix = "C-x";
-    escapeTime = 10;
-    historyLimit = 50000;
     extraConfig = ''
-      # Remove Vim mode delays
-      set -g focus-events on
-
       # Enable full mouse support
       set -g mouse on
 
@@ -292,6 +280,6 @@
       bind-key -T copy-mode-vi 'C-k' select-pane -U
       bind-key -T copy-mode-vi 'C-l' select-pane -R
       bind-key -T copy-mode-vi 'C-\' select-pane -l
-      '';
-    };
+    '';
+  };
 }
