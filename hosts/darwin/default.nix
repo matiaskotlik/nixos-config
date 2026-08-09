@@ -78,7 +78,7 @@ let user = "matiaskotlik"; in
               path = "/Users/${user}/Downloads";
               arrangement = "name";
               displayas = "stack";
-              showas = "grid";
+              showas = "fan";
             };
           }
         ];
