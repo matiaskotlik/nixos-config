@@ -29,8 +29,6 @@ let user = "matiaskotlik"; in
   environment.systemPackages = with pkgs;
     import ../../modules/shared/packages.nix { inherit pkgs; };
 
-  services.emacs.enable = true;
-
   # Tailscale
   services.tailscale.enable = true;
 

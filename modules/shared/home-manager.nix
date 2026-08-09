@@ -1,9 +1,11 @@
 { config, pkgs, lib, ... }:
 
-let name = "Matias Kotlik";
-    user = "matiaskotlik";
-    email = "matiaskotlik@users.noreply.github.com"; in
 {
+  gh = {
+    enable = true;
+    settings.git_protocol = "ssh";
+  };
+
   git = {
     enable = true;
     ignores = [
@@ -15,8 +17,8 @@ let name = "Matias Kotlik";
       enable = true;
     };
     settings = {
-      user.name = name;
-      user.email = email;
+      user.name = "Matias Kotlik";
+      user.email = "matiaskotlik@users.noreply.github.com";
       init.defaultBranch = "main";
       core = {
         editor = "vim";
@@ -31,6 +33,14 @@ let name = "Matias Kotlik";
         st = "status";
       };
     };
+    # Albacore account, for repos under ~/albacore
+    includes = [{
+      condition = "gitdir:~/albacore/";
+      contents = {
+        user.email = "matias-albacore@users.noreply.github.com";
+        core.sshCommand = "ssh -o IdentitiesOnly=yes -i ~/.ssh/id_albacore.pub";
+      };
+    }];
   };
 
   fish = {
@@ -43,6 +53,23 @@ let name = "Matias Kotlik";
   direnv = {
     enable = true;
     nix-direnv.enable = true;
+  };
+
+  claude-code = {
+    enable = true;
+    # Binary comes from the homebrew cask, it self-updates
+    package = null;
+    settings = {
+      permissions.defaultMode = "auto";
+      worktree.baseRef = "fresh";
+      enabledPlugins = {
+        "vercel@claude-plugins-official" = true;
+        "linear@claude-plugins-official" = true;
+      };
+      tui = "fullscreen";
+      theme = "dark";
+      editorMode = "vim";
+    };
   };
 
   vim = {
@@ -165,32 +192,22 @@ let name = "Matias Kotlik";
   ssh = {
     enable = true;
     enableDefaultConfig = false;
-    includes = [
-      (lib.mkIf pkgs.stdenv.hostPlatform.isLinux
-        "/home/${user}/.ssh/config_external"
-      )
-      (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin
-        "/Users/${user}/.ssh/config_external"
-      )
-    ];
+    includes = [ "~/.ssh/config_external" ];
     settings = {
-      "*" = {
+      # Default GitHub identity, albacore repos override via core.sshCommand
+      "github.com" = {
+        IdentitiesOnly = true;
+        IdentityFile = [ "~/.ssh/id_personal.pub" ];
+      };
+      "*" = lib.hm.dag.entryAfter [ "github.com" ] {
         # Set the default values we want to keep
         SendEnv = [ "LANG" "LC_*" ];
         HashKnownHosts = true;
+        # Private keys live in Bitwarden, never on disk
+        IdentityAgent = if pkgs.stdenv.hostPlatform.isDarwin
+                        then "~/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
+                        else "~/.bitwarden-ssh-agent.sock";
       };
-      # Example SSH configuration for GitHub
-      # "github.com" = {
-      #   IdentitiesOnly = true;
-      #   IdentityFile = [
-      #     (lib.mkIf pkgs.stdenv.hostPlatform.isLinux
-      #       "/home/${user}/.ssh/id_github"
-      #     )
-      #     (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin
-      #       "/Users/${user}/.ssh/id_github"
-      #     )
-      #   ];
-      # };
     };
   };
 

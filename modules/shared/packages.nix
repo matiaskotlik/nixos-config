@@ -37,7 +37,6 @@ with pkgs; [
   
   # Development tools
   curl
-  gh
   fzf
   fh
   

@@ -28,7 +28,6 @@ shared-packages ++ [
   # Testing and development tools
   rofi
   rofi-calc
-  libtool # for Emacs vterm
 
   # Screenshot and recording tools
   flameshot
@@ -37,7 +36,7 @@ shared-packages ++ [
   tree
   unixtools.ifconfig
   unixtools.netstat
-  xclip # For the org-download package in Emacs
+  xclip # Clipboard access from the terminal
   xwininfo # Provides a cursor to click and learn about windows
   xrandr
 
