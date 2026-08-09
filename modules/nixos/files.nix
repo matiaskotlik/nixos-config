@@ -173,7 +173,7 @@ let
 
     # Web browser
     ctrl + alt + Return
-         google-chrome-stable
+         firefox
 
     # File browser at home dir
     super + shift + @space
@@ -240,7 +240,7 @@ let
     text = ''
       #!/bin/sh
 
-      /etc/profiles/per-user/${user}/bin/google-chrome-stable --new-window "https://search.nixos.org/packages"
+      /etc/profiles/per-user/${user}/bin/firefox --new-window "https://search.nixos.org/packages"
     '';
   };
 

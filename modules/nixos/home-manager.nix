@@ -102,7 +102,7 @@ in
           sticky_history = "yes";
           history_length = 20;
           history = "ctrl+grave";
-          browser = "google-chrome-stable";
+          browser = "firefox";
           always_run_script = true;
           title = "Dunst";
           class = "Dunst";

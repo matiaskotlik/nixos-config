@@ -47,9 +47,6 @@ shared-packages ++ [
   sqlite
   xdg-utils
 
-  # Other utilities
-  google-chrome
-
   # PDF viewer
   zathura
 
