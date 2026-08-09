@@ -24,6 +24,12 @@ let name = "Matias Kotlik";
       };
       pull.rebase = true;
       rebase.autoStash = true;
+      alias = {
+        co = "checkout";
+        br = "branch";
+        ci = "commit";
+        st = "status";
+      };
     };
   };
 
