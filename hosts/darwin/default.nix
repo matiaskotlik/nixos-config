@@ -8,41 +8,31 @@ let user = "matiaskotlik"; in
     ../../modules/shared
   ];
 
-  nix = {
-    package = pkgs.nix;
+  # Determinate Nix
+  determinateNix = {
+    enable = true;
 
-    settings = {
+    customSettings = {
       trusted-users = [ "@admin" "${user}" ];
-      substituters = [ "https://nix-community.cachix.org" "https://cache.nixos.org" ];
-      trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+      extra-substituters = [ "https://nix-community.cachix.org" ];
+      extra-trusted-public-keys = [ "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
     };
 
-    gc = {
-      automatic = true;
-      interval = { Weekday = 0; Hour = 2; Minute = 0; };
-      options = "--delete-older-than 30d";
-    };
-
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
+    # Garbage collection
+    determinateNixd.garbageCollector.strategy = "automatic";
   };
 
+
+  # Touch ID for sudo
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   environment.systemPackages = with pkgs;
     import ../../modules/shared/packages.nix { inherit pkgs; };
 
-  launchd.user.agents.emacs.path = [ config.environment.systemPath ];
-  launchd.user.agents.emacs.serviceConfig = {
-    KeepAlive = true;
-    ProgramArguments = [
-      "/bin/sh"
-      "-c"
-      "/bin/wait4path ${pkgs.emacs}/bin/emacs && exec ${pkgs.emacs}/bin/emacs --fg-daemon"
-    ];
-    StandardErrorPath = "/tmp/emacs.err.log";
-    StandardOutPath = "/tmp/emacs.out.log";
-  };
+  services.emacs.enable = true;
+
+  # Tailscale
+  services.tailscale.enable = true;
 
   system = {
     checks.verifyNixPath = false;
@@ -68,6 +58,27 @@ let user = "matiaskotlik"; in
         launchanim = true;
         orientation = "bottom";
         tilesize = 48;
+
+        persistent-apps = [
+          { app = "/Applications/Safari.app"; }
+          { app = "/System/Applications/Messages.app"; }
+          { app = "/System/Applications/Notes.app"; }
+          { app = "/System/Applications/Music.app"; }
+          { app = "/System/Applications/Photos.app"; }
+          { app = "/System/Applications/Photo Booth.app"; }
+          { app = "/System/Applications/System Settings.app"; }
+        ];
+
+        persistent-others = [
+          {
+            folder = {
+              path = "/Users/${user}/Downloads";
+              arrangement = "name";
+              displayas = "stack";
+              showas = "grid";
+            };
+          }
+        ];
       };
 
       finder = {

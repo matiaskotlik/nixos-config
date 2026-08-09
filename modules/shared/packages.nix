@@ -14,10 +14,6 @@ with pkgs; [
   age
   gnupg
 
-  # Cloud-related tools and SDKs
-  docker
-  docker-compose
-
   # Media-related packages
   dejavu_fonts
   fd
@@ -28,7 +24,8 @@ with pkgs; [
   meslo-lgs-nf
 
   # Node.js development tools
-  nodejs_24
+  nodejs_26
+  pnpm_11
 
   # Text and terminal utilities
   htop
@@ -43,6 +40,7 @@ with pkgs; [
   gh
   fzf
   direnv
+  fh
   
   # Programming languages and runtimes
   go

@@ -1,7 +1,8 @@
 {
-  description = "Starter Configuration for MacOS and NixOS";
+  description = "Matias' nix-darwin and NixOS system configuration";
 
   inputs = {
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
     darwin = {
@@ -29,7 +30,7 @@
     };
   };
 
-  outputs = { self, darwin, nix-homebrew, homebrew-bundle, homebrew-core, homebrew-cask, home-manager, nixpkgs, disko } @inputs:
+  outputs = { self, determinate, darwin, nix-homebrew, homebrew-bundle, homebrew-core, homebrew-cask, home-manager, nixpkgs, disko } @inputs:
     let
       user = "matiaskotlik";
       linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
@@ -83,6 +84,7 @@
           inherit system;
           specialArgs = inputs;
           modules = [
+            determinate.darwinModules.default
             home-manager.darwinModules.home-manager
             nix-homebrew.darwinModules.nix-homebrew
             {

@@ -1,22 +1,23 @@
 _:
 
 [
-  # Development Tools
-  "homebrew/cask/docker"
-  "iterm2"
+  # Development
+  "claude-code"
+  "orbstack"
+
+  # JetBrains IDEs
+  "clion"
+  "intellij-idea"
+  "pycharm"
 
   # Browsers
   "firefox"
 
-  # Communication Tools - Examples (uncomment as needed)
+  # Communication
   "discord"
   "notion"
-  "slack"
   "signal"
 
-  # Utility Tools - Examples (uncomment as needed)
-  "bitwarden"
-
-  # Entertainment Tools - Examples (uncomment as needed)
+  # Entertainment
   "spotify"
 ]

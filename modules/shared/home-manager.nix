@@ -6,7 +6,11 @@ let name = "Matias Kotlik";
 {
   git = {
     enable = true;
-    ignores = [ "*.swp" ];
+    ignores = [
+      "*.swp"
+      ".DS_Store"
+      "**/.claude/settings.local.json"
+    ];
     lfs = {
       enable = true;
     };
@@ -21,6 +25,13 @@ let name = "Matias Kotlik";
       pull.rebase = true;
       rebase.autoStash = true;
     };
+  };
+
+  fish = {
+    enable = true;
+    plugins = [
+      { name = "bass"; src = pkgs.fishPlugins.bass.src; }
+    ];
   };
 
   vim = {
@@ -54,6 +65,12 @@ let name = "Matias Kotlik";
       set noswapfile
       set backupdir=~/.config/vim/backups
       set directory=~/.config/vim/swap
+
+      " Persistent undo
+      set undofile
+      set undodir=~/.config/vim/undo
+      set undolevels=1000
+      set undoreload=10000
 
       " Relative line numbers for easy movement
       set relativenumber
@@ -145,16 +162,16 @@ let name = "Matias Kotlik";
         "/Users/${user}/.ssh/config_external"
       )
     ];
-    matchBlocks = {
+    settings = {
       "*" = {
         # Set the default values we want to keep
-        sendEnv = [ "LANG" "LC_*" ];
-        hashKnownHosts = true;
+        SendEnv = [ "LANG" "LC_*" ];
+        HashKnownHosts = true;
       };
       # Example SSH configuration for GitHub
       # "github.com" = {
-      #   identitiesOnly = true;
-      #   identityFile = [
+      #   IdentitiesOnly = true;
+      #   IdentityFile = [
       #     (lib.mkIf pkgs.stdenv.hostPlatform.isLinux
       #       "/home/${user}/.ssh/id_github"
       #     )

@@ -11,22 +11,25 @@ let
   additionalFiles = import ./files.nix { inherit user config pkgs; };
 in
 {
-  imports = [
-   ./dock
-  ];
-
   # It me
+  # nix-darwin only touches users listed in knownUsers
+  users.knownUsers = [ user ];
   users.users.${user} = {
     name = "${user}";
+    uid = 501;
     home = "/Users/${user}";
     isHidden = false;
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
   };
+
+  # Fish shell
+  programs.fish.enable = true;
+  environment.shells = [ pkgs.fish ];
 
   homebrew = {
     enable = true;
     casks = pkgs.callPackage ./casks.nix {};
-    # onActivation.cleanup = "uninstall";
+    onActivation.cleanup = "uninstall";
 
     # These app IDs are from using the mas CLI app
     # mas = mac app store
@@ -39,13 +42,15 @@ in
     # you may receive an error message "Redownload Unavailable with This Apple ID".
     # This message is safe to ignore. (https://github.com/dustinlyons/nixos-config/issues/83)
     masApps = {
-      # "wireguard" = 1451685025;
+      "bitwarden" = 1352778147;
+      "slack" = 803453959;
     };
   };
 
   # Enable home-manager
   home-manager = {
     useGlobalPkgs = true;
+    backupFileExtension = "bak";
     users.${user} = { pkgs, config, lib, ... }:{
       home = {
         enableNixpkgsReleaseCheck = false;
@@ -63,26 +68,6 @@ in
       # https://github.com/nix-community/home-manager/issues/3344
       manual.manpages.enable = false;
     };
-  };
-
-  # Fully declarative dock using the latest from Nix Store
-  local.dock = {
-    enable = true;
-    username = user;
-    entries = [
-      { path = "/Applications/Safari.app/"; }
-      { path = "/System/Applications/Messages.app/"; }
-      { path = "/System/Applications/Notes.app/"; }
-      { path = "/System/Applications/Music.app/"; }
-      { path = "/System/Applications/Photos.app/"; }
-      { path = "/System/Applications/Photo Booth.app/"; }
-      { path = "/System/Applications/System Settings.app/"; }
-      {
-        path = "${config.users.users.${user}.home}/Downloads";
-        section = "others";
-        options = "--sort name --view grid --display stack";
-      }
-    ];
   };
 
 }
