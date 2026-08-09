@@ -39,7 +39,6 @@ with pkgs; [
   curl
   gh
   fzf
-  direnv
   fh
   
   # Programming languages and runtimes

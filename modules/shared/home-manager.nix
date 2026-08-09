@@ -40,6 +40,11 @@ let name = "Matias Kotlik";
     ];
   };
 
+  direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
   vim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes vim-startify vim-tmux-navigator ];

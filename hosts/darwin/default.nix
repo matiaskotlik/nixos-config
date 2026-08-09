@@ -68,6 +68,8 @@ let user = "matiaskotlik"; in
           { app = "/Applications/Slack.app"; }
           { app = "/Applications/Discord.app"; }
           { app = "/Applications/Signal.app"; }
+          { app = "/System/Applications/Messages.app"; }
+          { app = "/System/Applications/Mail.app"; }
           { app = "/Applications/Notion.app"; }
           { app = "/Applications/Spotify.app"; }
         ];
