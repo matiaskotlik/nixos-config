@@ -29,9 +29,8 @@ let user = "matiaskotlik"; in
   };
 
 
-  environment.systemPackages = with pkgs; [
-    emacs-unstable
-  ] ++ (import ../../modules/shared/packages.nix { inherit pkgs; });
+  environment.systemPackages = with pkgs;
+    import ../../modules/shared/packages.nix { inherit pkgs; };
 
   launchd.user.agents.emacs.path = [ config.environment.systemPath ];
   launchd.user.agents.emacs.serviceConfig = {
