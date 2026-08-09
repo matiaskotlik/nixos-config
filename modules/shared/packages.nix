@@ -18,7 +18,7 @@ with pkgs; [
   dejavu_fonts
   fd
   font-awesome
-  hack-font
+  nerd-fonts.hack
   noto-fonts
   noto-fonts-color-emoji
   meslo-lgs-nf
