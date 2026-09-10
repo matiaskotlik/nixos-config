@@ -72,6 +72,9 @@ in
           # tmux windows as native tabs
           OpenTmuxWindowsIn = 2;
           AutoHideTmuxClientSession = true;
+          # Links go to the default browser
+          NoSyncOpenLinksInApp = true;
+          NoSyncOpenLinksInApp_selection = 0;
         };
 
         # https://github.com/nix-community/home-manager/issues/3344

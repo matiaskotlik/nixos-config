@@ -81,6 +81,7 @@
       enabledPlugins = {
         "vercel@claude-plugins-official" = true;
         "linear@claude-plugins-official" = true;
+        "mattpocock-skills@claude-plugins-official" = true;
       };
       tui = "fullscreen";
       theme = "dark";
@@ -242,6 +243,8 @@
     enable = true;
     focusEvents = true;
     mouse = true;
+    # Default screen lacks 256 colors
+    terminal = "tmux-256color";
     plugins = with pkgs.tmuxPlugins; [
       vim-tmux-navigator
       sensible
@@ -274,6 +277,18 @@
     ];
     prefix = "C-x";
     extraConfig = ''
+      # -----------------------------------------------------------------------------
+      # Terminal features
+      # -----------------------------------------------------------------------------
+
+      # Claude Code shift+enter
+      set -as terminal-features 'xterm*:extkeys'
+      set -s extended-keys always
+      set -s extended-keys-format csi-u
+
+      # Claude Code notifications, progress
+      set -g allow-passthrough on
+
       # -----------------------------------------------------------------------------
       # Key bindings
       # -----------------------------------------------------------------------------
