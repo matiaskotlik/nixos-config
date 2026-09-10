@@ -10,6 +10,7 @@
       "Blur Radius": 12,
       "Unlimited Scrollback": true,
       "Custom Command": "Yes",
+      "Run Command In Login Shell": true,
       "Command": "/Users/matias/.nix-profile/bin/tmux -CC new -A -s main",
       "Triggers": [
         {

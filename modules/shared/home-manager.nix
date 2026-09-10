@@ -88,7 +88,7 @@
       };
       model = "fable";
       voice.enabled = true;
-      tui = "fullscreen";
+      tui = "default";
       theme = "dark";
       editorMode = "vim";
     }
