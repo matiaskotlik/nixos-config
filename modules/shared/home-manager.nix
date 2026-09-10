@@ -75,6 +75,8 @@
       # Claude runs brew upgrade
       env.CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE = "1";
       permissions.defaultMode = "auto";
+      # Bypass mode needs no prompt
+      skipDangerousModePermissionPrompt = true;
       worktree.baseRef = "fresh";
       enabledPlugins = {
         "vercel@claude-plugins-official" = true;
@@ -238,6 +240,8 @@
 
   tmux = {
     enable = true;
+    focusEvents = true;
+    mouse = true;
     plugins = with pkgs.tmuxPlugins; [
       vim-tmux-navigator
       sensible
@@ -270,9 +274,6 @@
     ];
     prefix = "C-x";
     extraConfig = ''
-      # Mouse support
-      set -g mouse on
-
       # -----------------------------------------------------------------------------
       # Key bindings
       # -----------------------------------------------------------------------------

@@ -4,6 +4,9 @@ _:
   # Development
   "claude-code@latest"
   "iterm2"
+  "itermai"
+  "itermbrowserplugin"
+  "itermcompanion"
   "linear"
   "orbstack"
 
