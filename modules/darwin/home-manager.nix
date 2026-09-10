@@ -25,6 +25,8 @@ in
 
   homebrew = {
     enable = true;
+    # Depot CLI is not in nixpkgs
+    brews = [ "depot" ];
     casks = pkgs.callPackage ./casks.nix { };
     onActivation.cleanup = "uninstall";
     onActivation.upgrade = true;
