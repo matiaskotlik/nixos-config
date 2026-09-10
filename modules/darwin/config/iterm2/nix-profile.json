@@ -8,7 +8,31 @@
       "Transparency": 0.1,
       "Blur": true,
       "Blur Radius": 12,
-      "Unlimited Scrollback": true
+      "Unlimited Scrollback": true,
+      "Custom Command": "Yes",
+      "Command": "/Users/matias/.nix-profile/bin/tmux -CC new -A -s main",
+      "Triggers": [
+        {
+          "action": "iTermEnterWorkgroupTrigger",
+          "parameter": "builtin.claudeCode",
+          "matchType": 113,
+          "eventParams": { "jobName": "claude" },
+          "regex": "",
+          "contentregex": "",
+          "partial": false,
+          "disabled": false
+        },
+        {
+          "action": "iTermExitWorkgroupTrigger",
+          "parameter": "",
+          "matchType": 114,
+          "eventParams": { "jobName": "claude", "leaderOnly": true },
+          "regex": "",
+          "contentregex": "",
+          "partial": false,
+          "disabled": false
+        }
+      ]
     }
   ]
 }

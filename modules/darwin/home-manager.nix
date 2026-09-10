@@ -5,13 +5,12 @@
 }:
 
 let
-  user = "matiaskotlik";
+  user = "matias";
   sharedFiles = import ../shared/files.nix { inherit config pkgs; };
   additionalFiles = import ./files.nix { inherit user config pkgs; };
 in
 {
-  # It me
-  # nix-darwin only touches users listed in knownUsers
+  # nix-darwin needs knownUsers
   users.knownUsers = [ user ];
   users.users.${user} = {
     name = "${user}";
@@ -21,7 +20,6 @@ in
     shell = pkgs.fish;
   };
 
-  # Fish shell
   programs.fish.enable = true;
   environment.shells = [ pkgs.fish ];
 
@@ -29,26 +27,17 @@ in
     enable = true;
     casks = pkgs.callPackage ./casks.nix { };
     onActivation.cleanup = "uninstall";
-    # Mirror nix-homebrew taps so cleanup won't untap them
+    onActivation.upgrade = true;
+    # So cleanup won't untap them
     taps = builtins.attrNames config.nix-homebrew.taps;
 
-    # These app IDs are from using the mas CLI app
-    # mas = mac app store
-    # https://github.com/mas-cli/mas
-    #
-    # $ nix shell nixpkgs#mas
-    # $ mas search <app name>
-    #
-    # If you have previously added these apps to your Mac App Store profile (but not installed them on this system),
-    # you may receive an error message "Redownload Unavailable with This Apple ID".
-    # This message is safe to ignore. (https://github.com/dustinlyons/nixos-config/issues/83)
+    # IDs from the mas CLI
     masApps = {
       "bitwarden" = 1352778147;
       "slack" = 803453959;
     };
   };
 
-  # Enable home-manager
   home-manager = {
     useGlobalPkgs = true;
     backupFileExtension = "bak";
@@ -72,18 +61,19 @@ in
         xdg.enable = true;
         programs = import ../shared/home-manager.nix { inherit config pkgs lib; };
 
-        # iTerm2 app prefs, profile lives in files.nix
+        # Profile lives in files.nix
         targets.darwin.defaults."com.googlecode.iterm2" = {
-          # Default to the nix-managed dynamic profile
           "Default Bookmark Guid" = "nix-default-0001";
           PromptOnQuit = false;
           OnlyWhenMoreTabs = false;
           HideTab = true;
           # Homebrew owns updates, not Sparkle
           SUEnableAutomaticChecks = false;
+          # tmux windows as native tabs
+          OpenTmuxWindowsIn = 2;
+          AutoHideTmuxClientSession = true;
         };
 
-        # Marked broken Oct 20, 2022 check later to remove this
         # https://github.com/nix-community/home-manager/issues/3344
         manual.manpages.enable = false;
       };

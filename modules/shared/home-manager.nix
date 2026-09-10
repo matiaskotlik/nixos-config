@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   ...
@@ -37,7 +38,7 @@
         st = "status";
       };
     };
-    # Albacore account, for repos under ~/albacore
+    # Repos under ~/albacore
     includes = [
       {
         condition = "gitdir:~/albacore/";
@@ -58,6 +59,7 @@
       }
     ];
     interactiveShellInit = "fish_vi_key_bindings";
+    shellAliases.claude = "claude --allow-dangerously-skip-permissions";
   };
 
   direnv = {
@@ -67,9 +69,11 @@
 
   claude-code = {
     enable = true;
-    # Binary comes from the homebrew cask, it self-updates
+    # Homebrew cask provides it
     package = null;
     settings = {
+      # Claude runs brew upgrade
+      env.CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE = "1";
       permissions.defaultMode = "auto";
       worktree.baseRef = "fresh";
       enabledPlugins = {
@@ -79,6 +83,33 @@
       tui = "fullscreen";
       theme = "dark";
       editorMode = "vim";
+    }
+    // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+      # iTerm2 per-tab status
+      hooks =
+        lib.genAttrs
+          [
+            "Notification"
+            "PermissionRequest"
+            "PostToolUse"
+            "PreToolUse"
+            "SessionEnd"
+            "SessionStart"
+            "Stop"
+            "StopFailure"
+            "SubagentStop"
+            "UserPromptSubmit"
+          ]
+          (_: [
+            {
+              hooks = [
+                {
+                  type = "command";
+                  command = "${config.xdg.configHome}/iterm2/cc-status";
+                }
+              ];
+            }
+          ]);
     };
   };
 
@@ -183,19 +214,19 @@
     enableDefaultConfig = false;
     includes = [ "~/.ssh/config_external" ];
     settings = {
-      # Default GitHub identity, albacore repos override via core.sshCommand
+      # Albacore repos override this
       "github.com" = {
         IdentitiesOnly = true;
         IdentityFile = [ "~/.ssh/id_personal.pub" ];
       };
       "*" = lib.hm.dag.entryAfter [ "github.com" ] {
-        # Set the default values we want to keep
+        # Defaults worth keeping
         SendEnv = [
           "LANG"
           "LC_*"
         ];
         HashKnownHosts = true;
-        # Private keys live in Bitwarden, never on disk
+        # Keys live in Bitwarden
         IdentityAgent =
           if pkgs.stdenv.hostPlatform.isDarwin then
             "~/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
@@ -239,7 +270,7 @@
     ];
     prefix = "C-x";
     extraConfig = ''
-      # Enable full mouse support
+      # Mouse support
       set -g mouse on
 
       # -----------------------------------------------------------------------------
@@ -251,18 +282,17 @@
       unbind '"'
       unbind %
 
-      # Split panes, vertical or horizontal
+      # Split panes
       bind-key x split-window -v
       bind-key v split-window -h
 
-      # Move around panes with vim-like bindings (h,j,k,l)
+      # Vim-like pane movement
       bind-key -n M-k select-pane -U
       bind-key -n M-h select-pane -L
       bind-key -n M-j select-pane -D
       bind-key -n M-l select-pane -R
 
-      # Smart pane switching with awareness of Vim splits.
-      # This is copy paste from https://github.com/christoomey/vim-tmux-navigator
+      # From vim-tmux-navigator
       is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
         | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
       bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h'  'select-pane -L'

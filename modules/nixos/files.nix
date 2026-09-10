@@ -42,7 +42,7 @@ in
 
       sleep .25
 
-      # Wait for the network to be up
+      # Wait for the network
       notify-send 'Waiting for network...'
       while ! systemctl is-active --quiet network-online.target; do sleep 1; done
       notify-send 'Network found.'
@@ -72,23 +72,23 @@ in
       super + f
             bspc node --state \~fullscreen
 
-      # Swap the current node and the biggest window
+      # Swap with the biggest
       super + g
             bspc node -s biggest.window
 
-      # Swap the current node and the smallest window
+      # Swap with the smallest
       super + shift + g
             bspc node -s biggest.window
 
-      # Alternate between the tiled and monocle layout
+      # Tiled or monocle layout
       super + m
             bspc desktop -l next
 
-      # Move between windows in monocle layout
+      # Move within monocle layout
       super + {_, alt + }m
             bspc node -f {next, prev}.local.!hidden.window
 
-      # Focus the node in the given direction
+      # Focus in a direction
       super + {_,shift + }{h,j,k,l}
             bspc node -{f,s} {west,south,north,east}
 
@@ -108,13 +108,13 @@ in
       ctrl + alt + {Up, Down}
             bspc desktop --focus {prev,next}
 
-      # Focus the older or newer node in the focus history
+      # Focus history, back and forward
       super + {o,i}
             bspc wm -h off; \
             bspc node {older,newer} -f; \
             bspc wm -h on
 
-      # Focus or send to the given desktop
+      # Focus or send to desktop
       super + {_,shift + }{1-9,0}
             bspc {desktop -f,node -d} '^{1-9,10}'
 
@@ -123,7 +123,7 @@ in
             bspc node -p {west,south,north,east}
 
       # Cancel the preselect
-      # For context on syntax: https://github.com/baskerville/bspwm/issues/344
+      # https://github.com/baskerville/bspwm/issues/344
       super + alt + {_,shift + }Escape
             bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
 
@@ -132,7 +132,7 @@ in
             bspc node -p {west,south,north,east}
 
       # Cancel the preselect
-      # For context on syntax: https://github.com/baskerville/bspwm/issues/344
+      # https://github.com/baskerville/bspwm/issues/344
       super + ctrl + {_,shift + }Escape
             bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
 
@@ -140,7 +140,7 @@ in
       super + ctrl + {m,x,s,p}
             bspc node -g {marked,locked,sticky,private}
 
-      # Send the newest marked node to the newest preselected node
+      # Marked node to preselected node
       super + y
             bspc node newest.marked.local -n newest.!automatic.local
 
@@ -174,11 +174,11 @@ in
       ctrl + alt + Return
            firefox
 
-      # File browser at home dir
+      # File browser
       super + shift + @space
            pcmanfm
 
-      # Take a screenshot with PrintSc
+      # Screenshot
       Print
            flameshot gui -c -p $HOME/.local/share/img/screenshots
 
@@ -186,15 +186,15 @@ in
       ctrl + alt + BackSpace
            i3lock
 
-      # Audio controls for + volume
+      # Volume up
       XF86AudioRaiseVolume
           pactl set-sink-volume @DEFAULT_SINK@ +5%
 
-      # Audio controls for - volume
+      # Volume down
       XF86AudioLowerVolume
           pactl set-sink-volume @DEFAULT_SINK@ -5%
 
-      # Audio controls for mute
+      # Mute
       XF86AudioMute
           pactl set-sink-mute @DEFAULT_SINK@ toggle
     '';
@@ -229,7 +229,7 @@ in
 
       /run/current-system/sw/bin/git -C ~/.local/share/src/nixpkgs fetch upstream master
       UPDATES=$(/run/current-system/sw/bin/git -C ~/.local/share/src/nixpkgs rev-list origin/master..upstream/master --count 2>/dev/null);
-      /run/current-system/sw/bin/echo " $UPDATES"; # Extra space for presentation with icon
+      /run/current-system/sw/bin/echo " $UPDATES"; # Space for the icon
       /run/current-system/sw/bin/sleep 1800;
     '';
   };
@@ -260,7 +260,7 @@ in
     '';
   };
 
-  # @todo: Don't use hardcoded src paths
+  # @todo: hardcoded src paths
   "${xdg_configHome}/rofi/bin/powermenu.sh" = {
     executable = true;
     text = ''

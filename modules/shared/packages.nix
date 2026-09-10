@@ -2,7 +2,7 @@
 
 with pkgs;
 [
-  # General packages for development and system management
+  # General
   btop
   coreutils
   killall
@@ -11,11 +11,11 @@ with pkgs;
   wget
   zip
 
-  # Encryption and security tools
+  # Security
   age
   gnupg
 
-  # Media-related packages
+  # Fonts and media
   dejavu_fonts
   fd
   font-awesome
@@ -24,11 +24,11 @@ with pkgs;
   noto-fonts-color-emoji
   meslo-lgs-nf
 
-  # Node.js development tools
+  # Node
   nodejs_26
   pnpm_11
 
-  # Text and terminal utilities
+  # Terminal utilities
   htop
   jq
   ripgrep
@@ -36,18 +36,18 @@ with pkgs;
   tmux
   unzip
 
-  # Development tools
+  # Development
   curl
   fzf
   fh
 
-  # Programming languages and runtimes
+  # Languages
   go
   rustc
   cargo
   openjdk
 
-  # Python packages
+  # Python
   python3
   virtualenv
 ]

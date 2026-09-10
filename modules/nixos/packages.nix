@@ -11,50 +11,49 @@ shared-packages
   docker
   docker-compose
 
-  # Security and authentication
+  # Security
   yubikey-agent
 
-  # App and package management
+  # Build and packaging
   appimage-run
   gnumake
   cmake
   home-manager
 
-  # Media and design tools
+  # Fonts
   fontconfig
 
-  # Productivity tools
+  # Audio
+  pavucontrol
 
-  # Audio tools
-  pavucontrol # Pulse audio controls
-
-  # Testing and development tools
+  # Launcher
   rofi
   rofi-calc
 
-  # Screenshot and recording tools
+  # Screenshots
   flameshot
 
-  # Text and terminal utilities
+  # Terminal utilities
   tree
   unixtools.ifconfig
   unixtools.netstat
-  xclip # Clipboard access from the terminal
-  xwininfo # Provides a cursor to click and learn about windows
+  xclip
+  xwininfo
   xrandr
 
-  # File and system utilities
-  inotify-tools # inotifywait, inotifywatch - For file system events
+  # System utilities
+  inotify-tools
   libnotify
-  pcmanfm # File browser
+  pcmanfm
   sqlite
   xdg-utils
 
   # PDF viewer
   zathura
 
-  # Development tools
+  # Browser
   firefox
 
-  # Music and entertainment
+  # Robotics
+  foxglove-studio
 ]
