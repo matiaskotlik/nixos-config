@@ -49,10 +49,7 @@
         "x86_64-linux"
         "aarch64-linux"
       ];
-      darwinSystems = [
-        "aarch64-darwin"
-        "x86_64-darwin"
-      ];
+      darwinSystems = [ "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
       devShell =
         system:
@@ -83,30 +80,28 @@
           '')
         }/bin/${scriptName}";
       };
-      mkLinuxApps = system: {
-        "apply" = mkApp "apply" system;
-        "build-switch" = mkApp "build-switch" system;
-        "clean" = mkApp "clean" system;
-        "copy-keys" = mkApp "copy-keys" system;
-        "create-keys" = mkApp "create-keys" system;
-        "check-keys" = mkApp "check-keys" system;
-        "install" = mkApp "install" system;
-      };
-      mkDarwinApps = system: {
-        "apply" = mkApp "apply" system;
-        "build" = mkApp "build" system;
-        "build-switch" = mkApp "build-switch" system;
-        "clean" = mkApp "clean" system;
-        "copy-keys" = mkApp "copy-keys" system;
-        "create-keys" = mkApp "create-keys" system;
-        "check-keys" = mkApp "check-keys" system;
-        "rollback" = mkApp "rollback" system;
+      appsBySystem = {
+        aarch64-darwin = [
+          "build"
+          "build-switch"
+          "clean"
+          "rollback"
+        ];
+        x86_64-linux = [
+          "build-switch"
+          "clean"
+        ];
+        aarch64-linux = [
+          "build-switch"
+          "clean"
+        ];
       };
     in
     {
       devShells = forAllSystems devShell;
-      apps =
-        nixpkgs.lib.genAttrs linuxSystems mkLinuxApps // nixpkgs.lib.genAttrs darwinSystems mkDarwinApps;
+      apps = builtins.mapAttrs (
+        system: names: nixpkgs.lib.genAttrs names (name: mkApp name system)
+      ) appsBySystem;
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
 
       darwinConfigurations = nixpkgs.lib.genAttrs darwinSystems (
