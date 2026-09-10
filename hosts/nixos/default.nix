@@ -4,7 +4,7 @@
 }:
 
 let
-  user = "matiaskotlik";
+  user = "matias";
   sshKeys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOk8iAnIaa1deoc7jw8YACPNVka1ZFJxhnU4G74TmS+p"
   ];
@@ -15,7 +15,6 @@ in
     ../../modules/shared
   ];
 
-  # Use the systemd-boot EFI boot loader.
   boot = {
     loader = {
       systemd-boot = {
@@ -32,25 +31,18 @@ in
       "usb_storage"
       "sd_mod"
     ];
-    # Uncomment for AMD GPU
-    # initrd.kernelModules = [ "amdgpu" ];
     kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "uinput" ];
   };
 
-  # Set your time zone.
   time.timeZone = "America/New_York";
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
   networking = {
-    hostName = "%HOST%"; # Define your hostname.
+    hostName = "%HOST%";
     useDHCP = false;
     interfaces."%INTERFACE%".useDHCP = true;
   };
 
-  # Turn on flag for proprietary software
   nix = {
     nixPath = [ "nixos-config=/home/${user}/.local/share/src/nixos-config:/etc/nixos" ];
     settings = {
@@ -72,39 +64,23 @@ in
     '';
   };
 
-  # Manages keys and such
   programs = {
     gnupg.agent.enable = true;
 
-    # Needed for anything GTK related
+    # Needed for GTK apps
     dconf.enable = true;
 
-    # My shell
     fish.enable = true;
   };
 
   services = {
-    # Fallback console on tty1: auto-login your user
+    # Fallback console on tty1
     getty.autologinUser = user;
     getty.autologinOnce = false;
 
-    # Display manager & X server
     displayManager.defaultSession = "none+bspwm";
     xserver = {
       enable = true;
-
-      # Uncomment these for AMD or Nvidia GPU
-      # boot.initrd.kernelModules = [ "amdgpu" ];
-      # videoDrivers = [ "amdgpu" ];
-      # videoDrivers = [ "nvidia" ];
-
-      # Uncomment for Nvidia GPU
-      # This helps fix tearing of windows for Nvidia cards
-      # screenSection = ''
-      #   Option       "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
-      #   Option       "AllowIndirectGLXProtocol" "off"
-      #   Option       "TripleBuffer" "on"
-      # '';
 
       displayManager = {
         lightdm = {
@@ -114,25 +90,21 @@ in
         };
       };
 
-      # Tiling window manager
       windowManager.bspwm = {
         enable = true;
       };
 
       xkb = {
-        # Turn Caps Lock into Ctrl
+        # Caps Lock as Ctrl
         layout = "us";
         options = "ctrl:nocaps";
       };
     };
 
-    # Better support for general peripherals
     libinput.enable = true;
 
-    # Let's be able to SSH into this machine
     openssh.enable = true;
 
-    # Sync state between machines
     syncthing = {
       enable = true;
       openDefaultPorts = true;
@@ -150,20 +122,6 @@ in
       };
     };
 
-    # Enable CUPS to print documents
-    # printing.enable = true;
-    # printing.drivers = [ pkgs.brlaser ]; # Brother printer driver
-
-    # Picom, my window compositor with fancy effects
-    #
-    # Notes on writing exclude rules:
-    #
-    #   class_g looks up index 1 in WM_CLASS value for an application
-    #   class_i looks up index 0
-    #
-    #   To find the value for a specific application, use `xprop` at the
-    #   terminal and then click on a window of the application in question
-    #
     picom = {
       enable = true;
       settings = {
@@ -262,27 +220,15 @@ in
       };
     };
 
-    gvfs.enable = true; # Mount, trash, and other functionalities
-    tumbler.enable = true; # Thumbnail support for images
+    gvfs.enable = true;
+    tumbler.enable = true;
   };
 
-  # Enable sound
-  # sound.enable = true;
-
-  # Video support
   hardware = {
     graphics.enable = true;
-    # pulseaudio.enable = true;
-    # hardware.nvidia.modesetting.enable = true;
-
-    # Enable Xbox support
-    # hardware.xone.enable = true;
-
-    # Crypto wallet support
-    ledger.enable = true;
+    ledger.enable = true; # Crypto wallet
   };
 
-  # Add docker daemon
   virtualisation = {
     docker = {
       enable = true;
@@ -290,12 +236,11 @@ in
     };
   };
 
-  # It's me, it's you, it's everyone
   users.users = {
     ${user} = {
       isNormalUser = true;
       extraGroups = [
-        "wheel" # Enable ‘sudo’ for the user.
+        "wheel"
         "docker"
       ];
       shell = pkgs.fish;
@@ -307,21 +252,7 @@ in
     };
   };
 
-  # Don't require password for users in `wheel` group for these commands
-  security.sudo = {
-    enable = true;
-    extraRules = [
-      {
-        commands = [
-          {
-            command = "${pkgs.systemd}/bin/reboot";
-            options = [ "NOPASSWD" ];
-          }
-        ];
-        groups = [ "wheel" ];
-      }
-    ];
-  };
+  security.sudo.wheelNeedsPassword = false;
 
   fonts.packages = with pkgs; [
     dejavu_fonts
@@ -337,5 +268,5 @@ in
     inetutils
   ];
 
-  system.stateVersion = "21.05"; # Don't change this
+  system.stateVersion = "21.05";
 }

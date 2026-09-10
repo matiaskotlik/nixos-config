@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  user = "matiaskotlik";
+  user = "matias";
 in
 
 {
@@ -10,7 +10,6 @@ in
     ../../modules/shared
   ];
 
-  # Determinate Nix
   determinateNix = {
     enable = true;
 
@@ -25,16 +24,13 @@ in
       ];
     };
 
-    # Garbage collection
     determinateNixd.garbageCollector.strategy = "automatic";
   };
 
-  # Touch ID for sudo
-  security.pam.services.sudo_local.touchIdAuth = true;
+  security.sudo.extraConfig = "%admin ALL=(ALL) NOPASSWD: ALL";
 
   environment.systemPackages = with pkgs; import ../../modules/shared/packages.nix { inherit pkgs; };
 
-  # Tailscale
   services.tailscale.enable = true;
 
   system = {
@@ -51,6 +47,7 @@ in
         InitialKeyRepeat = 15; # Values: 120, 94, 68, 35, 25, 15
 
         "com.apple.mouse.tapBehavior" = 1;
+        "com.apple.swipescrolldirection" = false;
         "com.apple.sound.beep.volume" = 0.0;
         "com.apple.sound.beep.feedback" = 0;
       };
@@ -64,7 +61,7 @@ in
 
         persistent-apps = [
           { app = "/Applications/Firefox.app"; }
-          { app = "/Users/${user}/Applications/Home Manager Apps/iTerm2.app"; }
+          { app = "/Applications/iTerm.app"; }
           { app = "/Applications/PyCharm.app"; }
           { app = "/Applications/IntelliJ IDEA.app"; }
           { app = "/Applications/CLion.app"; }
