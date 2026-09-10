@@ -27,7 +27,10 @@ in
     determinateNixd.garbageCollector.strategy = "automatic";
   };
 
-  security.sudo.extraConfig = "%admin ALL=(ALL) NOPASSWD: ALL";
+  security.pam.services.sudo_local = {
+    touchIdAuth = true;
+    reattach = true; # Touch ID inside tmux
+  };
 
   environment.systemPackages = with pkgs; import ../../modules/shared/packages.nix { inherit pkgs; };
 
