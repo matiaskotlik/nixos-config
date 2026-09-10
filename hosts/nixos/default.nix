@@ -37,11 +37,7 @@ in
 
   time.timeZone = "America/New_York";
 
-  networking = {
-    hostName = "%HOST%";
-    useDHCP = false;
-    interfaces."%INTERFACE%".useDHCP = true;
-  };
+  networking.hostName = "nixos";
 
   nix = {
     nixPath = [ "nixos-config=/home/${user}/.local/share/src/nixos-config:/etc/nixos" ];
