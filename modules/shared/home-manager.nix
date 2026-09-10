@@ -67,6 +67,8 @@
     nix-direnv.enable = true;
   };
 
+  mise.enable = true;
+
   claude-code = {
     enable = true;
     # Homebrew cask provides it
@@ -75,6 +77,7 @@
       # Claude runs brew upgrade
       env.CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE = "1";
       permissions.defaultMode = "auto";
+      autoMemoryEnabled = false;
       # Bypass mode needs no prompt
       skipDangerousModePermissionPrompt = true;
       worktree.baseRef = "fresh";
