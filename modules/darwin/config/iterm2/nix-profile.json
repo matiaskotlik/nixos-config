@@ -11,29 +11,7 @@
       "Unlimited Scrollback": true,
       "Custom Command": "Yes",
       "Run Command In Login Shell": true,
-      "Command": "/Users/matias/.nix-profile/bin/tmux -CC new -A -s main",
-      "Triggers": [
-        {
-          "action": "iTermEnterWorkgroupTrigger",
-          "parameter": "builtin.claudeCode",
-          "matchType": 113,
-          "eventParams": { "jobName": "claude" },
-          "regex": "",
-          "contentregex": "",
-          "partial": false,
-          "disabled": false
-        },
-        {
-          "action": "iTermExitWorkgroupTrigger",
-          "parameter": "",
-          "matchType": 114,
-          "eventParams": { "jobName": "claude", "leaderOnly": true },
-          "regex": "",
-          "contentregex": "",
-          "partial": false,
-          "disabled": false
-        }
-      ]
+      "Command": "/Users/matias/.nix-profile/bin/tmux -CC new -A -s main"
     }
   ]
 }

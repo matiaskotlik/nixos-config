@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   ...
@@ -91,33 +90,6 @@
       tui = "default";
       theme = "dark";
       editorMode = "vim";
-    }
-    // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
-      # iTerm2 per-tab status
-      hooks =
-        lib.genAttrs
-          [
-            "Notification"
-            "PermissionRequest"
-            "PostToolUse"
-            "PreToolUse"
-            "SessionEnd"
-            "SessionStart"
-            "Stop"
-            "StopFailure"
-            "SubagentStop"
-            "UserPromptSubmit"
-          ]
-          (_: [
-            {
-              hooks = [
-                {
-                  type = "command";
-                  command = "${config.xdg.configHome}/iterm2/cc-status";
-                }
-              ];
-            }
-          ]);
     };
   };
 

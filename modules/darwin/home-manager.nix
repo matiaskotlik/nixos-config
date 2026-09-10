@@ -61,7 +61,7 @@ in
           stateVersion = "23.11";
         };
         xdg.enable = true;
-        programs = import ../shared/home-manager.nix { inherit config pkgs lib; };
+        programs = import ../shared/home-manager.nix { inherit pkgs lib; };
 
         # Profile lives in files.nix
         targets.darwin.defaults."com.googlecode.iterm2" = {

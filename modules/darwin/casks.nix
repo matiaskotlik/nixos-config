@@ -6,7 +6,6 @@ _:
   "iterm2"
   "itermai"
   "itermbrowserplugin"
-  "itermcompanion"
   "linear"
   "orbstack"
 
