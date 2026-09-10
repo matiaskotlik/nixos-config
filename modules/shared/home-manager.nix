@@ -86,6 +86,8 @@
         "linear@claude-plugins-official" = true;
         "mattpocock-skills@claude-plugins-official" = true;
       };
+      model = "fable";
+      voice.enabled = true;
       tui = "fullscreen";
       theme = "dark";
       editorMode = "vim";

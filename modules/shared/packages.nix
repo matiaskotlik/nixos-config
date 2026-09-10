@@ -37,6 +37,7 @@ with pkgs;
   unzip
 
   # Development
+  awscli2
   curl
   fzf
   fh
