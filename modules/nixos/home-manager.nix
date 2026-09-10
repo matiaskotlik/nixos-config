@@ -6,7 +6,7 @@
 }:
 
 let
-  user = "matiaskotlik";
+  user = "matias";
   xdg_configHome = "/home/${user}/.config";
   shared-programs = import ../shared/home-manager.nix { inherit config pkgs lib; };
   shared-files = import ../shared/files.nix { inherit config pkgs; };
@@ -120,6 +120,25 @@ in
   };
 
   xdg.enable = true;
-  programs = shared-programs;
+
+  programs = shared-programs // {
+    # Linear has no Linux app
+    firefoxpwa = {
+      enable = true;
+      profiles."00000000000000000000000000" = {
+        name = "Default";
+        sites."01EE2A5N53GQ7CGD91RPHFH9TT" = {
+          name = "Linear";
+          url = "https://linear.app/";
+          manifestUrl = "https://linear.app/static/pwa.webmanifest?v=4";
+          desktopEntry.icon = pkgs.fetchurl {
+            name = "linear.png";
+            url = "https://static.linear.app/assets/pwa/icon_192.png?v=3";
+            hash = "sha256-QH9/el66MNIpBLBP+m6/Aqsfx0FfUnxZUmyIpuSLQw4=";
+          };
+        };
+      };
+    };
+  };
 
 }

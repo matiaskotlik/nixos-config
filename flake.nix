@@ -44,7 +44,7 @@
       disko,
     }@inputs:
     let
-      user = "matiaskotlik";
+      user = "matias";
       linuxSystems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -112,7 +112,7 @@
       darwinConfigurations = nixpkgs.lib.genAttrs darwinSystems (
         system:
         let
-          user = "matiaskotlik";
+          user = "matias";
         in
         darwin.lib.darwinSystem {
           inherit system;

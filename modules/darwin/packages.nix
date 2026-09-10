@@ -6,6 +6,5 @@ let
 in
 shared-packages
 ++ [
-  iterm2
   mas
 ]
