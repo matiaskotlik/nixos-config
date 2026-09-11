@@ -77,6 +77,8 @@ in
           # Links go to the default browser
           NoSyncOpenLinksInApp = true;
           NoSyncOpenLinksInApp_selection = 0;
+          # No Claude Code integration
+          NoSyncClaudeCodeIntegrationCompleted = false;
         };
 
         # https://github.com/nix-community/home-manager/issues/3344
