@@ -25,6 +25,16 @@ in
     };
 
     determinateNixd.garbageCollector.strategy = "automatic";
+
+    # applicative-systems vzvm builder
+    nixosVmBasedLinuxBuilder = {
+      enable = true;
+      package = pkgs.darwin.linux-builder-vz;
+      systems = [
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+    };
   };
 
   security.pam.services.sudo_local = {
@@ -37,6 +47,13 @@ in
   services.tailscale.enable = true;
 
   system = {
+    # Rosetta for x86_64-linux builds
+    activationScripts.extraActivation.text = ''
+      if ! /usr/bin/pgrep -q oahd; then
+        /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+      fi
+    '';
+
     checks.verifyNixPath = false;
     primaryUser = user;
     stateVersion = 5;
